@@ -1,6 +1,7 @@
 import os
 import sys
 from unidecode import unidecode
+import re
 
 # ARGUMENT 1 : Chemin du dossier à traiter
 path = sys.argv[1]
@@ -35,10 +36,13 @@ def clean_filename(name):
     base = base.replace('^', '_').replace('~', '_')
     base = base.lower()
     
+    base = re.sub(r'_+', '_', base).strip('_')
+    base = re.sub(r'_\d+$', '', base)
+    
     counter = 1
-    new_name = base + ext
+    new_name = f"{base}{ext}"
     while new_name in files_treated:
-        new_name = base + f"_{counter}" + ext
+        new_name = f"{base}_{counter}{ext}"
         counter += 1
     
     print(new_name)
